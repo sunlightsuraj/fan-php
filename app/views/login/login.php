@@ -24,23 +24,23 @@
                 </div>
                 <?php
                 if(isset($data['error']) && !empty($data['error'])) {
-                  ?>
-                  <p class="text-danger"><?php echo $data['error']; ?></p>
-                  <?php
+                    ?>
+                    <p class="text-danger"><?php echo $data['error']; ?></p>
+                    <?php
                 }
                 ?>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-block">Login</button>
                 </div>
                 <div class="form-group">
-                  <h4 class="text-center text-info">or</h4>
-                  <a href="<?php echo site_url; ?>register" class="btn btn-success btn-block">Sign Up</a>
+                    <h4 class="text-center text-info">or</h4>
+                    <a href="<?php echo site_url; ?>register" class="btn btn-success btn-block">Sign Up</a>
                 </div>
             </form>
         </div>
     </div>
     <br />
     <p class="text-center text-info">
-      <a href="<?php echo site_url; ?>">Home</a>
+        <a href="<?php echo site_url; ?>">Home</a>
     </p>
 </div>

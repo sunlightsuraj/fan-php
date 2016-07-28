@@ -7,15 +7,15 @@
 
 class LogOut extends Controller
 {
-    function __construct() {
-      parent::__construct();
-      if($this->isLoggedIn) {
-        Session::sessionDestroy();
-      }
-      header("location: ".site_url);
-    }
+	function __construct() {
+		parent::__construct();
+		if($this->isLoggedIn) {
+			Session::sessionDestroy();
+		}
+		header("location: ".site_url);
+	}
 
-    public function index($name = '') {
-      header("location: ".site_url);
-    }
+	public function index($name = '') {
+		header("location: ".site_url);
+	}
 }

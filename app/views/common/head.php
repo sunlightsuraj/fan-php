@@ -5,14 +5,17 @@
  * Time: 12:19 PM
  */
 
- ?>
+?>
 <head>
-    <title><?php echo $data['title']?></title>
-    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
-    <meta content="mvc" name="mvc">
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
-    <link href="<?php echo site_url?>assets/css/bootstrap.min.css" rel="stylesheet" />
-    <script src="<?php echo site_url?>assets/js/jquery.min.js" type="text/javascript"></script>
-    <script src="<?php echo site_url?>assets/js/bootstrap.min.js" type="text/javascript"></script>
+	<title><?php echo $data['title']?></title>
+	<meta content="text/html; charset=UTF-8" http-equiv="content-type">
+	<meta content="mvc" name="mvc">
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
+	<link href="<?php echo site_url?>assets/css/bootstrap.min.css" rel="stylesheet" />
+	<script src="<?php echo site_url?>assets/js/jquery.min.js" type="text/javascript"></script>
+	<script src="<?php echo site_url?>assets/js/bootstrap.min.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		var site_url = '<?=site_url?>';
+	</script>
 </head>
 <body>
