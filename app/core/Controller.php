@@ -15,7 +15,6 @@ class Controller
     protected $isLoggedIn = 0;
 
     function __construct() {
-      Session::init();
       $this->lib = new Library();
 
       if(Session::sessionGet('sess_stat') != null) {
@@ -31,4 +30,16 @@ class Controller
     public function view($view, $data = []) {
         require_once 'app/views/'.$view.'.php';
     }
+
+	public function redirect($path) {
+		header("location: ".site_url.$path);
+	}
+
+	protected function setError($error) {
+		$this->error = $error;
+	}
+
+	protected function getError() {
+		return $this->error;
+	}
 }

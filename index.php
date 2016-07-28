@@ -9,6 +9,8 @@
 
 require_once('app/init.php');
 
+Session::init();
+
 $app = new App();
 
 ?>
