@@ -7,77 +7,99 @@
 
  class DB
  {
-     private  $conn;
-     private $server;
-     private $user;
-     private $pass;
-     private $db;
-     private $error;
+	 private static  $conn = null;
+	 private static $objDB = null;
+	 private static $server = '';
+	 private static $user = '';
+	 private static $pass = '';
+	 private static $db = '';
+	 private $error = '';
 
-     /**
-      * constructor, initialize configuration
-      */
-     public function __construct() {
-         $this->server = server;
-         $this->user = user;
-         $this->pass = password;
-         $this->db = database;
-     }
+	 /**
+	  * constructor, initialize configuration
+	  */
+	 public function __construct() {
+		 static::$server = server;
+		 static::$user = user;
+		 static::$pass = password;
+		 static::$db = database;
+	 }
 
-     /**
-      * @param $dbext
-      * @return mixed
-      */
-     public function getConnection($dbext) {
-         if(method_exists($this,$dbext."_conn")){
-             $func = $dbext."_conn";
-             $this->$func();
-         }
+	 /**
+	  * @param $dbext
+	  * @return mixed
+	  */
+	 public static function getConnection($dbext) {
+		 if(static::$objDB == null) {
+			 static::$objDB = new DB();
+		 }
 
-         return $this->conn;
-     }
+		 if(method_exists(static::$objDB,$dbext."_conn")){
+			 $func = $dbext."_conn";
+			 static::$objDB->$func();
+		 }
 
-     /**
-      * method to create mysqli connection
-      */
-     public function mysqli_conn(){
-         try{
-             $this->conn = new mysqli($this->server, $this->user, $this->pass, $this->db);
-             if (mysqli_connect_errno()) {
-                 throw new Exception("Failed to connect: ". mysqli_connect_error());
-                 //exit();
-             }
-         }catch (Exception $e){
-             $this->setError($e->getMessage());
-         }
-     }
+		 return static::$conn;
+	 }
 
-     /**
-      * pdo connection function
-      */
-     public function pdo_conn() {
-         $dbhost = $this->server;
-         $dbname = $this->db;
-         $dbuser = $this->user;
-         $dbpass = $this->pass;
+	 /**
+	  * method to create mysqli connection
+	  */
+	 public static function mysqli_conn() {
+		 try{
+			 if(static::$conn == null) {
+				 static::$conn = new mysqli(static::$server, static::$user, static::$pass, static::$db);
+				 if (mysqli_connect_errno()) {
+					 throw new Exception("Failed to connect: ". mysqli_connect_error());
+					 //exit();
+				 }
+			 }
+		 }catch (Exception $e){
+			 static::$objDB->setError($e->getMessage());
+		 }
+	 }
 
-         try{
-             $this->conn = new PDO("mysql:host=$dbhost;dbname=$dbname",$dbuser,$dbpass,[PDO::ATTR_PERSISTENT => true]);
-             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-         }catch (Exception $e){
-             $this->setError($e->getMessage());
-         }
-     }
+	 /**
+	  * pdo connection function
+	  */
+	 public static function pdo_conn() {
+		 $dbhost = static::$server;
+		 $dbname = static::$db;
+		 $dbuser = static::$user;
+		 $dbpass = static::$pass;
 
-     /**
-      * function to set error
-      * @param $error
-      */
-     protected function setError($error) {
-         $this->error = $error;
-     }
+		 try {
+			 if(static::$conn == null) {
+				 static::$conn = new PDO("mysql:host=$dbhost;dbname=$dbname",$dbuser,$dbpass,[PDO::ATTR_PERSISTENT => true]);
+				 static::$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			 }
+		 } catch (PDOException $e) {
+			 static::$objDB->setError($e->getMessage());
+			 die(static::$objDB->getError());
+		 }
+	 }
 
-     public function getError() {
-         return $this->error;
-     }
+	 public static function startTransaction() {
+		 DB::getConnection(db_extension)->beginTransaction();
+	 }
+
+	 public static function commit() {
+		 DB::getConnection(db_extension)->commit();
+	 }
+
+	 public static function rollback() {
+		 DB::getConnection(db_extension)->rollback();
+	 }
+
+	 /**
+	  * function to set error
+	  * @param $error
+	  */
+	 protected function setError($error) {
+		 $this->error = $error;
+	 }
+
+	 public function getError() {
+		 return $this->error;
+	 }
  }
