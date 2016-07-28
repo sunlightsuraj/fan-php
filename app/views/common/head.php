@@ -11,8 +11,8 @@
     <meta content="text/html; charset=UTF-8" http-equiv="content-type">
     <meta content="mvc" name="mvc">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
-    <link href="<?php echo site_url?>Assets/css/bootstrap.min.css" rel="stylesheet" />
-    <script src="<?php echo site_url?>Assets/js/jquery.min.js" type="text/javascript"></script>
-    <script src="<?php echo site_url?>Assets/js/bootstrap.min.js" type="text/javascript"></script>
+    <link href="<?php echo site_url?>assets/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="<?php echo site_url?>assets/js/jquery.min.js" type="text/javascript"></script>
+    <script src="<?php echo site_url?>assets/js/bootstrap.min.js" type="text/javascript"></script>
 </head>
 <body>

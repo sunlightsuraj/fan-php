@@ -6,7 +6,7 @@
  */
 
 define("site_url", "http://localhost/fan-php/");
-define("site_assets_url", "http://localhost/fan-php/Assets");
+define("site_assets_url", site_url . "assets");
 define("server", "localhost");
 define("user", "root");
 define("password", "");
