@@ -1,7 +1,7 @@
 Options -MultiViews
 RewriteEngine On
 
-RewriteBase /fan-php
+#RewriteBase /fan-php
 
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
