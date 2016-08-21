@@ -13,21 +13,24 @@ class App
 
     public function __construct() {
         $url = $this->parseUrl();
+	    $i = 0;
+	    if(isset($url[$i])) {
+		    if(file_exists('app/controllers/'.$url[$i].'.php')) {
+			    $this->controller = $url[$i];
+			    unset($url[$i]);
+			    $i++;
+		    }
+	    }
 
-        if(isset($url[0]) && file_exists('app/controllers/'.$url[0].'.php')) {
-            $this->controller = $url[0];
-            unset($url[0]);
-        }
+	    require_once('app/controllers/'.$this->controller.'.php');
 
-        require_once('app/controllers/'.$this->controller.'.php');
-
-        $this->controller = new $this->controller;
-        if(isset($url[1])){
-            if(method_exists($this->controller,$url[1])){
-                $this->method = $url[1];
-                unset($url[1]);
-            }
-        }
+	    $this->controller = new $this->controller;
+	    if(isset($url[$i])){
+		    if(method_exists($this->controller,$url[$i]) && is_callable([$this->controller, $url[$i]])){
+			    $this->method = $url[$i];
+			    unset($url[$i]);
+		    }
+	    }
 
         $this->params = $url ? array_values($url) : [];
 
