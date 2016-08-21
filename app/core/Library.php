@@ -67,13 +67,15 @@ class Library
 	/**
 	 * function to upload image
 	 *
-	 * @param $ImageNamePrefix
-	 * @param $ImageFile
-	 * @param $ImagePath
+	 * @param     $ImageNamePrefix
+	 * @param     $ImageFile
+	 * @param int $ImageHeight
+	 * @param int $ImageWidth
+	 * @param     $ImagePath
 	 *
 	 * @return bool|string
 	 */
-	public static function imageupload ($ImageNamePrefix, $ImageFile, $ImagePath) {
+	public static function imageupload ($ImageNamePrefix, $ImageFile, $ImageHeight = 0, $ImageWidth = 0, $ImagePath, $rand = 0) {
 		############ Edit settings ##############
 		//$ThumbSquareSize 		= 200; //Thumbnail will be 200x200
 		$BigImageMaxSize = 500; //Image Maximum height or width
@@ -97,7 +99,10 @@ class Library
 				//return false;
 			}
 			// Random number will be added after image name
-			$RandomNumber = rand(0, 9999999999);
+			if($rand != 0)
+				$RandomNumber = $rand;
+			else
+				$RandomNumber = rand(0, 9999999999);
 
 			$ImageName = str_replace(' ', '-', strtolower($ImageFile['name'])); //get image name
 			//$ImageSize 		= $ImageFile['size']; // get original image size
@@ -145,9 +150,10 @@ class Library
 			$DestRandImageName = $DestinationDirectory . $NewImageName; // Image with destination directory
 
 			//Resize image to Specified Size by calling resizeImage function.
-			if (Library::resizeImage($CurWidth, $CurHeight, $BigImageMaxSize, $DestRandImageName, $CreatedImage, $Quality, $ImageType)) {
+			if (Library::resizeImage($CurWidth, $CurHeight, $ImageWidth, $ImageHeight, $BigImageMaxSize, $DestRandImageName, $CreatedImage, $Quality, $ImageType)) {
 				//all done return image path
-				return $DestRandImageName;
+				//return $DestRandImageName;
+				return $NewImageName;
 			} else {
 				//die('Resize Error'); //output error
 				throw new Exception('Resize Error');
@@ -159,7 +165,7 @@ class Library
 		return false;
 	}
 
-	public static function resizeImage ($CurWidth, $CurHeight, $MaxSize, $DestFolder, $SrcImage, $Quality, $ImageType) {
+	public static function resizeImage ($CurWidth, $CurHeight, $NewWidth = 0, $NewHeight = 0, $MaxSize, $DestFolder, $SrcImage, $Quality, $ImageType) {
 		try {
 			// This function will proportionally resize image
 			//Check Image size is not 0
@@ -168,10 +174,13 @@ class Library
 				//return false;
 			}
 
-			//Construct a proportional size of new image
-			$ImageScale = min($MaxSize / $CurWidth, $MaxSize / $CurHeight);
-			$NewWidth = ceil($ImageScale * $CurWidth);
-			$NewHeight = ceil($ImageScale * $CurHeight);
+			if($NewWidth == 0 && $NewHeight == 0) {
+				//Construct a proportional size of new image
+				$ImageScale = min($MaxSize / $CurWidth, $MaxSize / $CurHeight);
+				$NewWidth = ceil($ImageScale * $CurWidth);
+				$NewHeight = ceil($ImageScale * $CurHeight);
+			}
+
 			$NewCanves = imagecreatetruecolor($NewWidth, $NewHeight);
 
 			// Resize Image
