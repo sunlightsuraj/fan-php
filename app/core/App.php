@@ -8,21 +8,31 @@
 class App
 {
     protected $controller = 'home';
+    protected $controller_path = 'app/controllers/';
     protected $method = 'index';
     protected $params = [];
 
     public function __construct() {
         $url = $this->parseUrl();
 	    $i = 0;
-	    if(isset($url[$i])) {
-		    if(file_exists('app/controllers/'.$url[$i].'.php')) {
-			    $this->controller = $url[$i];
-			    unset($url[$i]);
-			    $i++;
-		    }
-	    }
+        if(isset($url[$i])) {
+            if(file_exists($this->controller_path . $url[$i] . '.php')) {
+                $this->controller = $url[$i];
+                unset($url[$i]);
+                $i++;
+            } else if(file_exists($this->controller_path . $url[$i]) && is_dir($this->controller_path . $url[$i])) {
+                $this->controller_path = $this->controller_path . $url[$i] . '/';
+                unset($url[$i]);
+                $i++;
+                if(file_exists($this->controller_path . $url[$i] . '.php')) {
+                    $this->controller = $url[$i];
+                    unset($url[$i]);
+                    $i++;
+                }
+            }
+        }
 
-	    require_once('app/controllers/'.$this->controller.'.php');
+	    require_once($this->controller_path . $this->controller.'.php');
 
 	    $this->controller = new $this->controller;
 	    if(isset($url[$i])){
